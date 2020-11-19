@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "./",
+    "typeRoots": [
+      "../Assets/Gen/Typing/",
+      "../Assets/Puerts/Typing/"
+    ],
+    "module": "commonjs",
+    "outDir": "../Assets/Javascript/Resources/",
+    "target": "ES6"
+  },
+  "files": [
+    "./lib/puerts-sdk.ts"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "typeAcquisition": {
+    "enable": true
+  }
+}
