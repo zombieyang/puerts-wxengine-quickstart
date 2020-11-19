@@ -29,14 +29,16 @@
 ## 如何使用？
 你可以参考[使用指南](./doc/quickstart.md)
 
+------------------------------------------------------------------------
+
 ### 刚上线，持续施工中
 1. 对于重载函数，在小游戏侧支持尚不完全。目前所有重载函数都只支持其中一种格式。需要考虑将[minigame-adaptor](https://github.com/wechat-miniprogram/minigame-adaptor)的js-adaptor抽出来重做
 2. unity侧工作流有待完善。准备参考[Geequlim的startkit](https://github.com/Geequlim/puerts-starter-kit)
 3. unity侧对behaviour的管理有待优化。
 4. 完善远端资源管理能力，目前还是使用的resources目录机制。
 
-### 贡献代码
+### 为本项目贡献
 可以提issue或者先找我聊方案，你在puerts官方群能找到我。
 > QQ群：942696334
 
-该方案在小游戏侧需要H5引擎支持，因此也欢迎任何H5引擎扶持该方案。
+该方案在小游戏侧需要JS游戏引擎支持，因此也欢迎任何JS游戏引擎扶持该方案。
