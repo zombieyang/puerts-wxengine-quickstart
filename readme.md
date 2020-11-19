@@ -2,7 +2,7 @@
 
 本项目基于 [Typescript解决方案puerts](https://github.com/Tencent/puerts) 和 [微信早前开源的minigame-adaptor](https://github.com/wechat-miniprogram/minigame-adaptor) 的js-adaptor部分。
 
-让你可以通过该项目在unity里直接编写微信小游戏，代码完全复用：）
+让你可以通过该项目在unity里用Typescript直接编写微信小游戏，代码完全复用：）
 
 用一张简单的架构图表明整个运作机制。
 
