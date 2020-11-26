@@ -97,16 +97,16 @@ namespace WeChat
         struct ConditionPropertiesHandler
         {
             public Func<Type, bool> condition;
-            public Func<Type, object, WXHierarchyContext, JSONObject> handler;
+            public Func<Type, object, WXHierarchyContext, List<string>, JSONObject> handler;
         }
         private static List<ConditionPropertiesHandler> conditionPropertiesHandlerList;
 
-        private static Dictionary<Type, Func<object, WXHierarchyContext, JSONObject>> typePropertiesHandlerDictionary;
+        private static Dictionary<Type, Func<object, WXHierarchyContext, List<string>, JSONObject>> typePropertiesHandlerDictionary;
 
         static WXMonoBehaviourPropertiesHandler()
         {
             conditionPropertiesHandlerList = new List<ConditionPropertiesHandler>();
-            typePropertiesHandlerDictionary = new Dictionary<Type, Func<object, WXHierarchyContext, JSONObject>>();
+            typePropertiesHandlerDictionary = new Dictionary<Type, Func<object, WXHierarchyContext, List<string>, JSONObject>>();
 
             RegisterConditionProperties();
             RegisterBasicProperties();
@@ -114,7 +114,7 @@ namespace WeChat
         }
 
         // 如果字段类型就是某个类型，执行某段属性转换逻辑
-        private static void AddTypePropertyHandler(Type type, Func<object, WXHierarchyContext, JSONObject> func)
+        private static void AddTypePropertyHandler(Type type, Func<object, WXHierarchyContext, List<string>, JSONObject> func)
         {
             if (!typePropertiesHandlerDictionary.ContainsKey(type))
             {
@@ -122,7 +122,7 @@ namespace WeChat
             }
         }
         // 如果字段类型命中了某个条件，执行某段属性转换逻辑
-        private static void AddConditionPropertyHandler(Func<Type, bool> condition, Func<Type, object, WXHierarchyContext, JSONObject> handler)
+        private static void AddConditionPropertyHandler(Func<Type, bool> condition, Func<Type, object, WXHierarchyContext, List<string>, JSONObject> handler)
         {
             ConditionPropertiesHandler conditionHandler = new ConditionPropertiesHandler();
             conditionHandler.condition = condition;
@@ -130,11 +130,11 @@ namespace WeChat
             conditionPropertiesHandlerList.Add(conditionHandler);
         }
 
-        public static JSONObject HandleField(FieldInfo field, Component obj, WXHierarchyContext context)
+        public static JSONObject HandleField(FieldInfo field, Component obj, WXHierarchyContext context, List<string> requireList)
         {
             try
             {
-                return innerHandleField(field.FieldType, field.GetValue(obj), context);
+                return innerHandleField(field.FieldType, field.GetValue(obj), context, requireList);
             }
             catch (Exception e)
             {
@@ -145,7 +145,7 @@ namespace WeChat
         }
 
         // handle all Serializable class recursively
-        private static void SerializableHandler(Type _type, JSONObject _data, object value, WXHierarchyContext context)
+        private static void SerializableHandler(Type _type, JSONObject _data, object value, WXHierarchyContext context, List<string> requireList)
         {
             if (value == null || _type == null) return;
             // get [SerializeField] && Public properties
@@ -165,7 +165,7 @@ namespace WeChat
                 Type fType = f.FieldType;
                 if (fType == null) continue;
 
-                _data.AddField(f.Name, innerHandleField(fType, itemValue, context));
+                _data.AddField(f.Name, innerHandleField(fType, itemValue, context, requireList));
                 fieldsDict.Add(f.Name, fType);
             }
 
@@ -175,13 +175,13 @@ namespace WeChat
                 fieldsDict,
                 new List<string>()
             );
-            context.AddResource(
-                new WXEngineScriptResource(scriptFile).Export(context.preset)
-            );
+            string scriptPath = new WXEngineScriptResource(scriptFile).Export(context.preset);
+            context.AddResource(scriptPath);
+            requireList.Add(scriptPath);
         }
 
         // inner recursion method, thus each if-statement must have @return in the end of the following block.
-        private static JSONObject innerHandleField(Type type, object value, WXHierarchyContext context)
+        private static JSONObject innerHandleField(Type type, object value, WXHierarchyContext context, List<string> requireList)
         {
             // 因为下方有递归尝试转换基类的逻辑，这里需要有一个终结点
             if (type == typeof(System.Object)) return null;
@@ -192,7 +192,7 @@ namespace WeChat
             {
                 if (handler.condition.Invoke(type))
                 {
-                    JSONObject result = handler.handler.Invoke(type, value, context);
+                    JSONObject result = handler.handler.Invoke(type, value, context, requireList);
                     if (result != null)
                     {
                         return result;
@@ -201,7 +201,7 @@ namespace WeChat
             }
 
             // 尝试转换它的基类
-            return innerHandleField(type.BaseType, value, context);
+            return innerHandleField(type.BaseType, value, context, requireList);
         }
 
         private static void RegisterConditionProperties()
@@ -211,9 +211,9 @@ namespace WeChat
                 {
                     return type.IsArray || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>));
                 },
-                (type, value, context) =>
+                (type, value, context, requireList) =>
                 {
-                    return typePropertiesHandlerDictionary[typeof(List<>)](value, context);
+                    return typePropertiesHandlerDictionary[typeof(List<>)](value, context, requireList);
                 }
             );
             AddConditionPropertyHandler(
@@ -221,7 +221,7 @@ namespace WeChat
                 {
                     return type.IsEnum;
                 },
-                (type, value, context) =>
+                (type, value, context, requireList) =>
                 {
                     return JSONObject.Create((int)value);
                 }
@@ -231,7 +231,7 @@ namespace WeChat
                 {
                     return type.IsSubclassOf(typeof(UnityEngine.Component)) || type == typeof(UnityEngine.GameObject);
                 },
-                (type, value, context) =>
+                (type, value, context, requireList) =>
                 {
                     // 取值
                     var o = (UnityEngine.Object)value;
@@ -279,9 +279,9 @@ namespace WeChat
                 {
                     return typePropertiesHandlerDictionary.ContainsKey(type);
                 },
-                (type, value, context) =>
+                (type, value, context, requireList) =>
                 {
-                    return typePropertiesHandlerDictionary[type](value, context);
+                    return typePropertiesHandlerDictionary[type](value, context, requireList);
                 }
             );
             AddConditionPropertyHandler(
@@ -290,10 +290,10 @@ namespace WeChat
                     // 基础类型都是isSerializable
                     return type.IsSerializable;
                 },
-                (type, value, context) =>
+                (type, value, context, requireList) =>
                 {
                     var innerData = new JSONObject(JSONObject.Type.OBJECT);
-                    SerializableHandler(type, innerData, value, context);
+                    SerializableHandler(type, innerData, value, context, requireList);
                     return innerData;
                 }
             );
@@ -302,68 +302,68 @@ namespace WeChat
         private static void RegisterBasicProperties()
         {
 
-            AddTypePropertyHandler(typeof(bool), (obj, context) =>
+            AddTypePropertyHandler(typeof(bool), (obj, context, requireList) =>
             {
                 return JSONObject.Create((bool)obj);
             });
 
-            AddTypePropertyHandler(typeof(int), (obj, context) =>
+            AddTypePropertyHandler(typeof(int), (obj, context, requireList) =>
             {
                 return JSONObject.Create((int)obj);
             });
 
-            AddTypePropertyHandler(typeof(byte), (obj, context) =>
+            AddTypePropertyHandler(typeof(byte), (obj, context, requireList) =>
             {
                 return JSONObject.Create((byte)obj);
             });
 
-            AddTypePropertyHandler(typeof(short), (obj, context) =>
+            AddTypePropertyHandler(typeof(short), (obj, context, requireList) =>
             {
                 return JSONObject.Create((short)obj);
             });
 
-            AddTypePropertyHandler(typeof(ushort), (obj, context) =>
+            AddTypePropertyHandler(typeof(ushort), (obj, context, requireList) =>
             {
                 return JSONObject.Create((ushort)obj);
             });
 
-            AddTypePropertyHandler(typeof(uint), (obj, context) =>
+            AddTypePropertyHandler(typeof(uint), (obj, context, requireList) =>
             {
                 return JSONObject.Create((uint)obj);
             });
 
-            AddTypePropertyHandler(typeof(sbyte), (obj, context) =>
+            AddTypePropertyHandler(typeof(sbyte), (obj, context, requireList) =>
             {
                 return JSONObject.Create((int)obj);
             });
 
-            AddTypePropertyHandler(typeof(long), (obj, context) =>
+            AddTypePropertyHandler(typeof(long), (obj, context, requireList) =>
             {
                 return JSONObject.Create((long)obj);
             });
 
-            AddTypePropertyHandler(typeof(decimal), (obj, context) =>
+            AddTypePropertyHandler(typeof(decimal), (obj, context, requireList) =>
             {
                 return JSONObject.Create(Convert.ToInt64((decimal)obj));
             });
 
-            AddTypePropertyHandler(typeof(ulong), (obj, context) =>
+            AddTypePropertyHandler(typeof(ulong), (obj, context, requireList) =>
             {
                 return JSONObject.Create(Convert.ToInt64((ulong)obj));
             });
 
-            AddTypePropertyHandler(typeof(float), (obj, context) =>
+            AddTypePropertyHandler(typeof(float), (obj, context, requireList) =>
             {
                 return JSONObject.Create((float)obj);
             });
 
-            AddTypePropertyHandler(typeof(double), (obj, context) =>
+            AddTypePropertyHandler(typeof(double), (obj, context, requireList) =>
             {
                 ;
                 return JSONObject.Create(Convert.ToSingle((double)obj));
             });
 
-            AddTypePropertyHandler(typeof(string), (obj, context) =>
+            AddTypePropertyHandler(typeof(string), (obj, context, requireList) =>
             {
                 var str = (string)obj;
                 if (str == null) return JSONObject.CreateStringObject("");
@@ -374,7 +374,7 @@ namespace WeChat
                 return JSONObject.CreateStringObject(str);
             });
 
-            AddTypePropertyHandler(typeof(char), (obj, context) =>
+            AddTypePropertyHandler(typeof(char), (obj, context, requireList) =>
             {
                 string tmp = "";
                 tmp += (char)obj;
@@ -385,7 +385,7 @@ namespace WeChat
 
         private static void RegisterUnityProperties()
         {
-            AddTypePropertyHandler(typeof(Vector2), (obj, context) =>
+            AddTypePropertyHandler(typeof(Vector2), (obj, context, requireList) =>
             {
                 Vector2 v = (Vector2)obj;
                 if (v == null) return null;
@@ -397,7 +397,7 @@ namespace WeChat
                 return vec2;
             });
 
-            AddTypePropertyHandler(typeof(Vector3), (obj, context) =>
+            AddTypePropertyHandler(typeof(Vector3), (obj, context, requireList) =>
             {
                 Vector3 v = (Vector3)obj;
                 if (v == null) return null;
@@ -410,7 +410,7 @@ namespace WeChat
                 return vec3;
             });
 
-            AddTypePropertyHandler(typeof(Vector4), (obj, context) =>
+            AddTypePropertyHandler(typeof(Vector4), (obj, context, requireList) =>
             {
                 Vector4 v = (Vector4)obj;
                 if (v == null) return null;
@@ -424,7 +424,7 @@ namespace WeChat
                 return vec4;
             });
 
-            AddTypePropertyHandler(typeof(Quaternion), (obj, context) =>
+            AddTypePropertyHandler(typeof(Quaternion), (obj, context, requireList) =>
             {
                 Quaternion v = (Quaternion)obj;
                 if (v == null) return null;
@@ -439,7 +439,7 @@ namespace WeChat
             });
 
 
-            AddTypePropertyHandler(typeof(Matrix4x4), (obj, context) =>
+            AddTypePropertyHandler(typeof(Matrix4x4), (obj, context, requireList) =>
             {
                 Matrix4x4 v = (Matrix4x4)obj;
                 if (v == null) return null;
@@ -465,7 +465,7 @@ namespace WeChat
                 return array16;
             });
 
-            AddTypePropertyHandler(typeof(Color), (obj, context) =>
+            AddTypePropertyHandler(typeof(Color), (obj, context, requireList) =>
             {
                 Color c = (Color)obj;
                 if (c == null) return null;
@@ -479,7 +479,7 @@ namespace WeChat
                 return vec4;
             });
 
-            AddTypePropertyHandler(typeof(TextAsset), (obj, context) =>
+            AddTypePropertyHandler(typeof(TextAsset), (obj, context, requireList) =>
             {
                 TextAsset t = (TextAsset)obj;
                 if (!t) return null;
@@ -513,7 +513,7 @@ namespace WeChat
                 return json;
             });
 
-            AddTypePropertyHandler(typeof(Material), (obj, context) =>
+            AddTypePropertyHandler(typeof(Material), (obj, context, requireList) =>
             {
                 Material material = (Material)obj;
                 if (material == null) return null;
@@ -531,14 +531,14 @@ namespace WeChat
                 return json;
             });
 
-            AddTypePropertyHandler(typeof(UnityEngine.LayerMask), (obj, context) =>
+            AddTypePropertyHandler(typeof(UnityEngine.LayerMask), (obj, context, requireList) =>
             {
                 LayerMask mask = (LayerMask)obj;
 
                 return JSONObject.Create(mask.value);
             });
 
-            AddTypePropertyHandler(typeof(List<>), (obj, context) =>
+            AddTypePropertyHandler(typeof(List<>), (obj, context, requireList) =>
             {
                 IEnumerable list = (IEnumerable)obj;
                 if (list == null) return null;
@@ -558,7 +558,7 @@ namespace WeChat
                     else
                     {
                         Type type = itemObj.GetType();
-                        JSONObject itemResult = innerHandleField(type, itemObj, context);
+                        JSONObject itemResult = innerHandleField(type, itemObj, context, requireList);
                         if (itemResult != null)
                         {
                             result.Add(itemResult);
@@ -568,7 +568,7 @@ namespace WeChat
                 return result;
             });
 
-            AddTypePropertyHandler(typeof(PuertsBeefBallSDK.RemoteResource), (obj, context) =>
+            AddTypePropertyHandler(typeof(PuertsBeefBallSDK.RemoteResource), (obj, context, requireList) =>
             {
                 var m = (PuertsBeefBallSDK.RemoteResource)obj;
                 return JSONObject.CreateStringObject(m.resourcePath);
@@ -576,7 +576,7 @@ namespace WeChat
 
             // disgusting code logic :(
             // refactor should be needed
-            AddTypePropertyHandler(typeof(PuertsBeefBallBehaviour), (obj, context) =>
+            AddTypePropertyHandler(typeof(PuertsBeefBallBehaviour), (obj, context, requireList) =>
             {
                 var m = (PuertsBeefBallBehaviour)obj;
                 if (!m) return null;
@@ -589,7 +589,7 @@ namespace WeChat
                 return innerData;
             });
 
-            AddTypePropertyHandler(typeof(Component), (obj, context) =>
+            AddTypePropertyHandler(typeof(Component), (obj, context, requireList) =>
             {
                 Component c = (Component)obj;
                 if (!c) return null;
@@ -603,7 +603,7 @@ namespace WeChat
             });
 
             // 在前面condition逻辑里，理论上已经把所有可能为prefab的逻辑走完
-            AddTypePropertyHandler(typeof(GameObject), (obj, context) =>
+            AddTypePropertyHandler(typeof(GameObject), (obj, context, requireList) =>
             {
                 throw new Exception("不支持节点属性指向GameObject，请改为指向Transform或是具体逻辑组件");
 

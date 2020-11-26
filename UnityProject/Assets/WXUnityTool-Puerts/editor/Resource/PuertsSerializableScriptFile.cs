@@ -1,3 +1,4 @@
+using System.IO;
 
 using System;
 using System.Collections.Generic;
@@ -14,22 +15,25 @@ namespace WeChat
 
         private bool isMonoBehaviour;
         private string logicClassName;
+        private List<string> requireList;
 
-        // 给monobehavior用
+        // 用于构造一个monobehaviour
         public PuertsSerializableScriptFile(
             string serializableTypeName,
             Dictionary<string, Type> bindingFields,
             List<string> bindingMethods,
-            string logicClassName
+            string logicClassName,
+            List<string> requireList
         ) : base("")
         {
             this.serializableTypeName = serializableTypeName;
             this.bindingFields = bindingFields;
             this.bindingMethods = bindingMethods;
             this.logicClassName = logicClassName;
+            this.requireList = requireList;
             isMonoBehaviour = true;
         }
-        // 给其他serializable用
+        // 用于构造一个非monobehavior的serializable
         public PuertsSerializableScriptFile(
             string serializableTypeName,
             Dictionary<string, Type> bindingFields,
@@ -39,6 +43,7 @@ namespace WeChat
             this.serializableTypeName = serializableTypeName;
             this.bindingFields = bindingFields;
             this.bindingMethods = bindingMethods;
+            isMonoBehaviour = false;
         }
 
         public override string GetExportPath()
@@ -52,28 +57,55 @@ namespace WeChat
             }
             else
             {
-                return "/Assets/puerts/serializable/" + this.serializableTypeName + ".binding.ts";
+                return "Assets/puerts/serializable/" + this.serializableTypeName + ".binding.ts";
             }
         }
 
         protected override string GetContent()
         {
-            string content = string.Format(@"
-import engine from 'engine';
-@engine.decorators.serialize('{0}')
-export default class {1} ",
-                this.serializableTypeName,
-                serializableTypeName.Replace(".", "_")
-            );
+            string content = "import engine from 'engine';";
+            
             if (isMonoBehaviour) {
-                content += string.Format(@"extends PuertsBehaviour {{
+                if (requireList.Count != 0) {
+                    // 加入require语句
+                    int stepToAssets = 0;
+                    string path = GetExportPath();
+                    while (path != "Assets") {
+                        stepToAssets++;
+                        path = Path.GetDirectoryName(path);
+
+                        if (stepToAssets > 20) {
+                            throw new Exception("无法找到脚本位置");
+                        }
+                    }
+                    string upward = "";
+                    for (int i = 0; i < stepToAssets; i++) {
+                        upward += "../";
+                    }
+
+                    foreach (string require in requireList) {
+                        content += string.Format("\nimport '{0}';", upward + require.Substring(0, require.Length - Path.GetExtension(require).Length));
+                    } 
+                }
+
+                content += string.Format(@"
+@engine.decorators.serialize('{0}')
+export default class {1} extends PuertsBehaviour {{
     constructor(entity) {{
-        super(entity, '{0}')
+        super(entity, '{2}')
     }}",
+                    this.serializableTypeName,
+                    serializableTypeName.Replace(".", "_"),
                     this.logicClassName
                 );
+
             } else {
-                content += "{";
+                content += string.Format(@"
+@engine.decorators.serialize('{0}')
+export default class {1} {{",
+                    this.serializableTypeName,
+                    serializableTypeName.Replace(".", "_")
+                );
             }
 
             foreach (string key in bindingFields.Keys)
@@ -99,7 +131,7 @@ export default class {1} ",
             content += string.Format(@"
 }}
 //@ts-ignore
-CS.{0} = {1};
+registerPuertsClass('{0}', {1});
                 ", serializableTypeName, serializableTypeName.Replace(".", "_"));
             return content;
         }
@@ -174,7 +206,7 @@ CS.{0} = {1};
                 }
                 else
                 {
-                    return string.Format("CS.System.Array$1<CS.{0}>", fixTypeName(itemType, isSerializeName));
+                    return string.Format("CS.System.Array$1<{0}>", fixTypeName(itemType, isSerializeName));
                 }
             }
             // else if (type.IsParameterized && type.GetDefinition() != null &&

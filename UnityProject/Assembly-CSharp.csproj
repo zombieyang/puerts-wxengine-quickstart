@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{5F1E4160-BA36-3F81-0263-9CFE5E1D6D0D}</ProjectGuid>
+    <ProjectGuid>{5B580621-09B4-68CB-B5F4-5B9DD210A60F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -127,7 +127,6 @@
      <Compile Include="Assets\WXUnityTool-Puerts\runtime\PuertsBeefBallSDK.cs" />
      <None Include="Assets\Puerts\Src\Resources\puerts\polyfill.js.txt" />
      <None Include="Assets\WeChatMiniGame\Common\Shaders\Trail.shader" />
-     <None Include="Assets\Javascript\Resources\src\Rotate.js.txt" />
      <None Include="Assets\WeChatMiniGame\Common\Shaders\StandardLit.shader" />
      <None Include="Assets\WeChatMiniGame\Common\Shaders\Line.shader" />
      <None Include="Assets\WeChatMiniGame\Common\Shaders\BlinnPhong.shader" />
@@ -137,23 +136,24 @@
      <None Include="Assets\Puerts\Src\Resources\puerts\cjsload.js.txt" />
      <None Include="Assets\WeChatMiniGame\Common\Shaders\Particle.shader" />
      <None Include="Assets\WeChatMiniGame\Common\Shaders\Shaders\PostProcess\Bloom.shader" />
-     <None Include="Assets\Javascript\Resources\lib\puerts-sdk.js.txt" />
+     <None Include="Assets\Javascript\Resources\src\Rotate.js.txt" />
      <None Include="Assets\Puerts\Src\Resources\puerts\timer.js.txt" />
      <None Include="Assets\Puerts\Src\Resources\puerts\log.js.txt" />
      <None Include="Assets\Puerts\Src\Resources\puerts\init.js.txt" />
      <None Include="Assets\WeChatMiniGame\Common\Shaders\BRDF.cginc" />
      <None Include="Assets\Puerts\Src\Resources\puerts\modular.js.txt" />
+     <None Include="Assets\Javascript\Resources\lib\puerts-sdk.js.txt" />
  <Reference Include="UnityEditor.StandardEvents">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/Applications/Unity2018/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

@@ -114,37 +114,37 @@ namespace WeChat
             });
 
             // 物理相关组件
-            RegisterRefComponents(typeof(Rigidbody), (context, comp, data, info) =>
-            {
-                data.AddField("ref", context.AddComponentInProperty(new WXRigidbody((Rigidbody)comp), (Rigidbody)comp));
-            });
-            RegisterRefComponents(typeof(BoxCollider), (context, comp, data, info) =>
-            {
+            // RegisterRefComponents(typeof(Rigidbody), (context, comp, data, info) =>
+            // {
+            //     data.AddField("ref", context.AddComponentInProperty(new WXRigidbody((Rigidbody)comp), (Rigidbody)comp));
+            // });
+            // RegisterRefComponents(typeof(BoxCollider), (context, comp, data, info) =>
+            // {
 
-                BoxCollider boxCollider = comp.gameObject.GetComponent<BoxCollider>();
-                data.AddField("ref", context.AddComponentInProperty(new WXBoxCollider(boxCollider.center, boxCollider.size, boxCollider.isTrigger, boxCollider.sharedMaterial), (BoxCollider)comp));
-            });
-            RegisterRefComponents(typeof(SphereCollider), (context, comp, data, info) =>
-            {
-                SphereCollider spherecollider = comp.gameObject.GetComponent<SphereCollider>();
-                data.AddField("ref", context.AddComponentInProperty(new WXSphereCollider(spherecollider.isTrigger, spherecollider.sharedMaterial, spherecollider.center, spherecollider.radius), (SphereCollider)comp));
-            });
-            RegisterRefComponents(typeof(CapsuleCollider), (context, comp, data, info) =>
-            {
-                CapsuleCollider capsulecollider = comp.gameObject.GetComponent<CapsuleCollider>();
-                data.AddField("ref", context.AddComponentInProperty(new WXCapsuleCollider(capsulecollider.isTrigger, capsulecollider.material, capsulecollider.center, capsulecollider.radius, capsulecollider.height, capsulecollider.direction), (CapsuleCollider)comp));
-            });
-            RegisterRefComponents(typeof(MeshCollider), (context, comp, data, info) =>
-            {
-                MeshCollider meshcollider = comp.gameObject.GetComponent<MeshCollider>();
-                data.AddField("ref", context.AddComponentInProperty(new WXMeshCollider(meshcollider.convex, meshcollider.isTrigger, (int)meshcollider.cookingOptions, meshcollider.sharedMaterial, meshcollider.sharedMesh), (MeshCollider)comp));
-            });
+            //     BoxCollider boxCollider = comp.gameObject.GetComponent<BoxCollider>();
+            //     data.AddField("ref", context.AddComponentInProperty(new WXBoxCollider(boxCollider.center, boxCollider.size, boxCollider.isTrigger, boxCollider.sharedMaterial), (BoxCollider)comp));
+            // });
+            // RegisterRefComponents(typeof(SphereCollider), (context, comp, data, info) =>
+            // {
+            //     SphereCollider spherecollider = comp.gameObject.GetComponent<SphereCollider>();
+            //     data.AddField("ref", context.AddComponentInProperty(new WXSphereCollider(spherecollider.isTrigger, spherecollider.sharedMaterial, spherecollider.center, spherecollider.radius), (SphereCollider)comp));
+            // });
+            // RegisterRefComponents(typeof(CapsuleCollider), (context, comp, data, info) =>
+            // {
+            //     CapsuleCollider capsulecollider = comp.gameObject.GetComponent<CapsuleCollider>();
+            //     data.AddField("ref", context.AddComponentInProperty(new WXCapsuleCollider(capsulecollider.isTrigger, capsulecollider.material, capsulecollider.center, capsulecollider.radius, capsulecollider.height, capsulecollider.direction), (CapsuleCollider)comp));
+            // });
+            // RegisterRefComponents(typeof(MeshCollider), (context, comp, data, info) =>
+            // {
+            //     MeshCollider meshcollider = comp.gameObject.GetComponent<MeshCollider>();
+            //     data.AddField("ref", context.AddComponentInProperty(new WXMeshCollider(meshcollider.convex, meshcollider.isTrigger, (int)meshcollider.cookingOptions, meshcollider.sharedMaterial, meshcollider.sharedMesh), (MeshCollider)comp));
+            // });
 
-            RegisterRefComponents(typeof(CharacterController), (context, comp, data, info) =>
-            {
-                CharacterController characterController = comp.gameObject.GetComponent<CharacterController>();
-                data.AddField("ref", context.AddComponentInProperty(new WXCharactorController(characterController.slopeLimit, characterController.stepOffset, characterController.skinWidth, characterController.minMoveDistance, characterController.center, characterController.radius, characterController.height), (CharacterController)comp));
-            });
+            // RegisterRefComponents(typeof(CharacterController), (context, comp, data, info) =>
+            // {
+            //     CharacterController characterController = comp.gameObject.GetComponent<CharacterController>();
+            //     data.AddField("ref", context.AddComponentInProperty(new WXCharactorController(characterController.slopeLimit, characterController.stepOffset, characterController.skinWidth, characterController.minMoveDistance, characterController.center, characterController.radius, characterController.height), (CharacterController)comp));
+            // });
         }
     }
 

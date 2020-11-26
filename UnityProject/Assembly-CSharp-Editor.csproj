@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{6CE0CC66-E3CF-2096-A920-C14799E07BAB}</ProjectGuid>
+    <ProjectGuid>{3CC9D2C0-C461-07D9-EDF3-4FFB4DE5C299}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -67,14 +67,6 @@
      <Compile Include="Assets\UnityTool\core\editor\lib\UnityUtil.cs" />
      <Compile Include="Assets\UnityTool\core\editor\lib\WXEditorHelper.cs" />
      <Compile Include="Assets\UnityTool\core\editor\lib\WXEngineUtil.cs" />
-     <Compile Include="Assets\UnityTool\core\editor\physics\Component\WXCharactorController.cs" />
-     <Compile Include="Assets\UnityTool\core\editor\physics\Component\WXEngineBoxCollider.cs" />
-     <Compile Include="Assets\UnityTool\core\editor\physics\Component\WXEngineCapsuleCollider.cs" />
-     <Compile Include="Assets\UnityTool\core\editor\physics\Component\WXEngineMeshCollider.cs" />
-     <Compile Include="Assets\UnityTool\core\editor\physics\Component\WXEngineRegisterPhysics.cs" />
-     <Compile Include="Assets\UnityTool\core\editor\physics\Component\WXEngineRigidbody.cs" />
-     <Compile Include="Assets\UnityTool\core\editor\physics\Component\WXEngineSphereCollider.cs" />
-     <Compile Include="Assets\UnityTool\core\editor\physics\Resource\WXPhysicsMaterial.cs" />
      <Compile Include="Assets\UnityTool\core\editor\src\base\BeefBallConfig.cs" />
      <Compile Include="Assets\UnityTool\core\editor\src\base\ExportPreset.cs" />
      <Compile Include="Assets\UnityTool\core\editor\src\base\ExportStore.cs" />
@@ -159,6 +151,12 @@
      <Compile Include="Assets\WeChatMiniGame\Common\Shaders\Shaders\Editor\EffectGUI.cs" />
      <Compile Include="Assets\WeChatMiniGame\Common\Shaders\Shaders\Editor\StandardLitGUI.cs" />
      <Compile Include="Assets\WXUnityTool-Puerts\editor\BindingCfg.cs" />
+     <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\physics\WXEngineBoxCollider.cs" />
+     <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\physics\WXEngineCapsuleCollider.cs" />
+     <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\physics\WXEngineMeshCollider.cs" />
+     <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\physics\WXEngineRigidbody.cs" />
+     <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\physics\WXEngineSphereCollider.cs" />
+     <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\physics\WXPhysicsMaterial.cs" />
      <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\PuertsBeefBallBindingConverter.cs" />
      <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\PuertsBeefBallRootBehaviour.cs" />
      <Compile Include="Assets\WXUnityTool-Puerts\editor\Component\WXEngineMeshFilter.cs" />
@@ -175,16 +173,16 @@
      <None Include="Assets\Puerts\Src\Editor\Resources\puerts\gencode\doT.js.txt" />
      <None Include="Assets\Puerts\Src\Editor\Resources\puerts\templates\type.tpl.txt" />
  <Reference Include="UnityEditor.StandardEvents">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>/Applications/Unity2018/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -429,6 +427,12 @@
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>/Applications/Unity2018/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
  </Reference>
+ <Reference Include="Pri.LongPath">
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Assets/UnityTool/framework/reference/editor/Pri.LongPath.dll</HintPath>
+ </Reference>
+ <Reference Include="ICSharpCode.SharpZipLib">
+ <HintPath>/Users/yanghao/Code/puerts-wxengine-quickstart/UnityProject/Assets/UnityTool/framework/reference/editor/ICSharpCode.SharpZipLib.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Users/yanghao/Library/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
@@ -443,12 +447,6 @@
  </Reference>
  <Reference Include="UnityEngine.StandardEvents">
  <HintPath>/Users/yanghao/Library/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll</HintPath>
- </Reference>
- <Reference Include="Pri.LongPath">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Assets/UnityTool/framework/reference/editor/Pri.LongPath.dll</HintPath>
- </Reference>
- <Reference Include="ICSharpCode.SharpZipLib">
- <HintPath>/Users/yanghao/Documents/UnityProject/111/puerts-beefball-startkit/Assets/UnityTool/framework/reference/editor/ICSharpCode.SharpZipLib.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>/Applications/Unity2018/Unity.app/Contents/MonoBleedingEdge/lib/mono/2.0-api/mscorlib.dll</HintPath>
@@ -480,7 +478,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{5F1E4160-BA36-3F81-0263-9CFE5E1D6D0D}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{5B580621-09B4-68CB-B5F4-5B9DD210A60F}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

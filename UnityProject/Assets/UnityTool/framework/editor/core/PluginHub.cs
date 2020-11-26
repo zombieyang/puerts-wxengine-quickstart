@@ -25,7 +25,7 @@ namespace WeChat {
         }
 
         // 导出插件版本。该字符串会在构建流程里被修改，请勿改动
-        private static string _frameworkVersion = "0.1.1";
+        private static string _frameworkVersion = "1.0.4";
 
         // 分辨是源码版还是发布后的代码版
         public static readonly string distribution = "Release";
@@ -56,7 +56,7 @@ namespace WeChat {
             }
             return _frameworkVersion;
         }
-        public static List<string> versionList = new List<string> (new string[] { "0.1.1" });
+        public static List<string> versionList = new List<string> (new string[] { "1.0.4" });
         public static int versionIndex = 0;
         public static ExportPluginModule coreModule = null;
         public static ExportPluginModule nguiModule = null;

@@ -84,7 +84,6 @@ namespace WeChat
             JSONObject editorInfo = new JSONObject(JSONObject.Type.OBJECT);
             editorInfo.AddField("assetVersion", 2);
             prefabJSONObject.AddField("editorInfo", editorInfo);
-            Debug.Log("Export Prefab " + prefabPath + "  " + hierarchyContext.resourceList.Count);
             //WXResourceStore.AddJSONResource(
             //    prefabPath,
             //    "prefab",

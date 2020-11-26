@@ -93,32 +93,52 @@ namespace WeChat
             }
 
             // Colliders
+            // Collider[] colliders = go.GetComponents<Collider>();
+            // if (colliders != null && colliders.Length > 0)
+            // {
+            //     foreach (var collider in colliders)
+            //     {
+            //         if (collider is BoxCollider)
+            //         {
+            //             //obj.components.Add(context.AddComponent(new WXBoxCollider((BoxCollider)collider), collider));
+            //             obj.components.Add(context.AddComponent(new WXUnityComponent(collider), collider));
+            //         }
+            //         else if (collider is SphereCollider)
+            //         {
+            //             //obj.components.Add(context.AddComponent(new WXSphereCollider((SphereCollider)collider), collider));
+            //             obj.components.Add(context.AddComponent(new WXUnityComponent(collider), collider));
+            //         }
+            //         else if (collider is CapsuleCollider)
+            //         {
+            //             //obj.components.Add(context.AddComponent(new WXCapsuleCollider((CapsuleCollider)collider), collider));
+            //             obj.components.Add(context.AddComponent(new WXUnityComponent(collider), collider));
+            //         }
+            //         else if (collider is MeshCollider)
+            //         {
+            //             //obj.components.Add(context.AddComponent(new WXMeshCollider((MeshCollider)collider), collider));
+            //             obj.components.Add(context.AddComponent(new WXUnityComponent(collider), collider));
+            //         }
+            //     }
+            // }
+            // Colliders
             Collider[] colliders = go.GetComponents<Collider>();
-            if (colliders != null && colliders.Length > 0)
-            {
-                foreach (var collider in colliders)
-                {
-                    if (collider is BoxCollider)
-                    {
-                        //obj.components.Add(context.AddComponent(new WXBoxCollider((BoxCollider)collider), collider));
-                        obj.components.Add(context.AddComponent(new WXUnityComponent(collider), collider));
-                    }
-                    else if (collider is SphereCollider)
-                    {
-                        //obj.components.Add(context.AddComponent(new WXSphereCollider((SphereCollider)collider), collider));
-                        obj.components.Add(context.AddComponent(new WXUnityComponent(collider), collider));
-                    }
-                    else if (collider is CapsuleCollider)
-                    {
-                        //obj.components.Add(context.AddComponent(new WXCapsuleCollider((CapsuleCollider)collider), collider));
-                        obj.components.Add(context.AddComponent(new WXUnityComponent(collider), collider));
-                    }
-                    else if (collider is MeshCollider)
-                    {
-                        //obj.components.Add(context.AddComponent(new WXMeshCollider((MeshCollider)collider), collider));
-                        obj.components.Add(context.AddComponent(new WXUnityComponent(collider), collider));
+            if (colliders != null && colliders.Length > 0 ) {
+                foreach(var collider in colliders) {
+                    if (collider is BoxCollider) {
+                        obj.components.Add(context.AddComponent(new WXBoxCollider((BoxCollider)collider), collider));
+                    } else if (collider is SphereCollider) {
+                        obj.components.Add(context.AddComponent(new WXSphereCollider((SphereCollider)collider), collider));
+                    } else if (collider is CapsuleCollider) {
+                        obj.components.Add(context.AddComponent(new WXCapsuleCollider((CapsuleCollider)collider), collider));
+                    } else if (collider is MeshCollider) {
+                        obj.components.Add(context.AddComponent(new WXMeshCollider((MeshCollider)collider), collider));
                     }
                 }
+            }
+
+            Rigidbody rigidbody = go.GetComponent<Rigidbody>();
+            if (rigidbody != null) {
+                obj.components.Add(context.AddComponent(new WXRigidbody(rigidbody), rigidbody));
             }
         }
     }

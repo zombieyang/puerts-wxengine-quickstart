@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 891c722ea40211fb71c15e13326e5432, type: 3}
   m_Name: beefball
   m_EditorClassIdentifier: 
-  storagePath: /Users/yanghao/Documents/UnityExport/puerts-startkit/assets/unity/
+  storagePath: /Users/yanghao/Documents/UnityExport/puerts-startkit2/assets/unity/
   exportPath: 

@@ -37,6 +37,7 @@ namespace WeChat
 
             Dictionary<string, Type> bindingFields = new Dictionary<string, Type>();
             List<string> bindingMethods = new List<string>();
+            List<string> requireList = new List<string>();
 
             if (this.behaviour != null)
             {
@@ -44,6 +45,13 @@ namespace WeChat
                 Type myObjectType = behaviour.GetType();
                 FieldInfo[] fields = myObjectType.GetFields(flags);
 
+                // if (behaviour.GetType().Name == typeof(PuertsTest.TankMovement).Name) {
+                //     var fieldss = behaviour.GetType().GetFields(BindingFlags.Static | BindingFlags.Public);
+                //     Debug.Log(fieldss.Length);
+                //     foreach (FieldInfo item in fieldss) {
+                //         Debug.Log(item.Name);
+                //     }
+                // }
                 foreach (FieldInfo field in fields)
                 {
                     if (
@@ -56,7 +64,7 @@ namespace WeChat
                         !field.IsDefined(typeof(HideInInspector), true)
                     )
                     {
-                        JSONObject result = WXMonoBehaviourPropertiesHandler.HandleField(field, behaviour, context);
+                        JSONObject result = WXMonoBehaviourPropertiesHandler.HandleField(field, behaviour, context, requireList);
 
                         if (result != null)
                         {
@@ -71,13 +79,14 @@ namespace WeChat
                     bindingMethods.Add(method.Name);
                 }
             }   
-
+            
             string script = new WXEngineScriptResource(
                 new PuertsSerializableScriptFile(
                     behaviour.GetType().FullName,
                     bindingFields,
                     bindingMethods,
-                    behaviour.JSClassName
+                    behaviour.JSClassName,
+                    requireList
                 )
             ).Export(context.preset);
             

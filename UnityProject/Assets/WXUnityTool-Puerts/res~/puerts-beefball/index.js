@@ -11,6 +11,22 @@ window.CS = {
     MiniGameAdaptor,
     System: window.System
 };
+window.registerPuertsClass = function (className, cls) {
+    const namespaceAndClass = className.split('.');
+
+    let pointer = CS;
+    for (let i = 0; i < namespaceAndClass.length; i++) {
+        // 类名
+        if (i == namespaceAndClass.length - 1) {
+            pointer[namespaceAndClass[i]] = cls
+        }
+        // 命名空间名
+        else {
+            pointer[namespaceAndClass[i]] = pointer[namespaceAndClass[i]] || {};
+            pointer = pointer[namespaceAndClass[i]];
+        }
+    }
+}
 
 window.puerts = {
     $typeof(val) {

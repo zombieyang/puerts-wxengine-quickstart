@@ -24,7 +24,6 @@ namespace WeChat
 
         protected override JSONObject ToJSON(WXHierarchyContext context)
         {
-            Debug.Log("Particle System ToJSON");
             ParticleSystemRenderer particleSystemRenderer = particleSys.GetComponent<ParticleSystemRenderer>();
 
             JSONObject json = new JSONObject(JSONObject.Type.OBJECT);

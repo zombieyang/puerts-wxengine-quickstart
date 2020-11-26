@@ -57,7 +57,7 @@ namespace WeChat
 
         public override string GetHash()
         {
-            return "" + WXUtility.GetMD5FromString(GetExportPath()) + File.GetLastWriteTime(unityAssetPath).Ticks;
+            return "" + WXUtility.GetMD5FromString(GetExportPath()) + (unityAssetPath != "" ? File.GetLastWriteTime(unityAssetPath).Ticks.ToString() : "");
         }
     }
 
