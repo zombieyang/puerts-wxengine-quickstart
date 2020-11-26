@@ -2,7 +2,7 @@
 
 ## 准备工作
 1. Unity3D (版本不限，但目前仅测试过2018.2)
-2. 微信开发者工具开发版
+2. 微信开发者工具开发版（注意一定得是开发版。）
 [传送门](https://developers.weixin.qq.com/miniprogram/dev/devtools/nightly.html)
 
 ## unity侧环境搭建
@@ -48,6 +48,10 @@
 打开微信开发者工具，在小游戏tab选择“导入”，然后选择您刚刚在unity里创建的项目。
 
 ![image7](./image7.png)
+
+在右侧详情处需要先将es6转es5打开。
+
+![image7](./image7.5.png)
 
 点击“方案工具”
 
