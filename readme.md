@@ -1,6 +1,8 @@
 # 请改用 https://github.com/zombieyang/puerts_unity_webgl_demo
 
 ----------------
+归档
+----------------
 
 # 在unity里用Typescript写微信小游戏
 
